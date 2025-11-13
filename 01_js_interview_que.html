@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Interview Questions</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #111827;
+      color: #f3f4f6;
+      padding: 30px 20px;
+      line-height: 1.5;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #a78bfa;
+    }
+
+    .question-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+      max-width: 1300px;
+      margin: 0 auto 40px auto;
+    }
+
+    .question-card {
+      background: #1f2937;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      min-height: 45px;
+    }
+
+    .question-card:hover {
+      background: #374151;
+      border-color: #6d28d9;
+      transform: translateY(-2px);
+    }
+
+    .question-id {
+      background: #6d28d9;
+      color: #fff;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      flex: 1;
+    }
+
+    .definition-box {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #1f2937;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      display: none;
+      border-left: 4px solid #a78bfa;
+    }
+
+    .definition-box.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .definition-box h2 {
+      color: #c084fc;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .definition-box p {
+      color: #e5e7eb;
+      white-space: pre-line;
+      font-size: 0.95rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>JavaScript Interview Questions</h1>
+
+  <div class="question-grid" id="questionGrid"></div>
+  <div id="definitionBox" class="definition-box">
+    <h2 id="defTitle"></h2>
+    <p id="defContent"></p>
+  </div>
+
+  <script>
+    const PLAN = [
+      { questionId: 1, question: "What is JavaScript?", definition: "JavaScript (JS) is a high-level, interpreted programming language used to make web pages interactive, dynamic, and functional. It runs both in the browser and on servers (Node.js)." },
+      { questionId: 2, question: "var vs let vs const?", definition: "In JavaScript:\n• var → Function-scoped, allows redeclaration.\n• let → Block-scoped, allows reassignment but not redeclaration.\n• const → Block-scoped, cannot be reassigned or redeclared." },
+      { questionId: 3, question: "What is Scope?", definition: "Scope defines the accessibility of variables, functions, and objects.\nTypes:\n1. Global Scope – Accessible anywhere.\n2. Function Scope – Accessible only within the function.\n3. Block Scope – Accessible within the block (let, const)." },
+      { questionId: 4, question: "What is hoisting?", definition: "Hoisting is JavaScript’s behavior of moving declarations (not initializations) to the top of their scope before execution." },
+      { questionId: 5, question: "What is a function?", definition: "A function is a reusable block of code that performs a specific task when invoked." },
+      { questionId: 6, question: "What is a closure? When is it useful? What is Lexical Scope?", definition: "A closure is formed when an inner function remembers variables from its outer scope even after the outer function has executed.\nUseful for data privacy and creating function factories." },
+      { questionId: 7, question: "What is IIFE (Immediately Invoked Function Expression)?", definition: "An IIFE is a function that runs immediately after being defined.\nSyntax:\n(function() { ... })();" },
+      { questionId: 8, question: "What are Prototypes?", definition: "Prototypes are objects from which other objects inherit properties and methods in JavaScript’s prototype chain." },
+      { questionId: 9, question: "How to deep clone an object?", definition: "You can deep clone using:\n• structuredClone(obj)\n• JSON.parse(JSON.stringify(obj))\n• Libraries like Lodash (cloneDeep)." },
+      { questionId: 10, question: "Difference between == and ===?", definition: "== compares values with type conversion.\n=== compares values and types (strict equality)." },
+      { questionId: 11, question: "Explain 'this' keyword in JS?", definition: "'this' refers to the object that owns the function being executed, and its value depends on the call context." }
+    ];
+const jsInterviewQuestions = [
+  {
+    questionId: 1,
+    question: "What is JavaScript?",
+    definition: `
+JavaScript (JS) is a high-level, interpreted programming language mainly used to make web pages interactive, dynamic, and functional.
+It runs in the browser as well as on servers (using Node.js).
+
+👉 With JS, you can:
+• Manipulate the DOM (change HTML/CSS dynamically).
+• Handle user events (clicks, forms, etc.).
+• Communicate with servers (API calls).
+• Build full-stack applications.
+
+In short: HTML gives structure, CSS gives style, and JavaScript gives behavior to web applications.
+`
+  },
+  {
+    questionId: 2,
+    question: "var vs let vs const?",
+    definition: `
+In JavaScript:
+• var → function-scoped and allows redeclaration.
+• let → block-scoped, can be reassigned but not redeclared.
+• const → block-scoped, cannot be reassigned.
+
+Example:
+var x = 10;  // function scope
+let y = 20;  // block scope
+const z = 30; // cannot reassign
+`
+  },
+  {
+    questionId: 3,
+    question: "What is Scope?",
+    definition: `
+Scope defines the accessibility or visibility of variables, functions, and objects in different parts of the code.
+
+Types of scope:
+1. Global Scope – variables accessible everywhere.
+2. Function Scope – variables declared inside a function are local to that function.
+3. Block Scope – variables declared using let and const inside {} are not accessible outside.
+`
+  },
+  {
+    questionId: 4,
+    question: "What is hoisting?",
+    definition: `
+Hoisting means variable and function declarations are moved to the top of their scope before code execution.
+
+👉 Behavior:
+var → hoisted with default value undefined.
+let → hoisted but in the temporal dead zone (ReferenceError if accessed early).
+const → hoisted but must be initialized at declaration.
+
+Example:
+console.log(a); // undefined
+var a = 10;
+
+console.log(b); // ReferenceError
+let b = 20;
+
+console.log(c); // ReferenceError
+const c = 30;
+`
+  },
+  {
+    questionId: 5,
+    question: "What is a function?",
+    definition: `
+A function is a reusable block of code designed to perform a specific task.
+
+Functions help to:
+• Organize code into smaller parts.
+• Reuse logic without rewriting.
+• Improve readability and maintainability.
+`
+  },
+  {
+    questionId: 6,
+    question: "What is a closure? When is it useful? What is Lexical Scope?",
+    definition: `
+A closure is created when a function is defined inside another function and 
+the inner function “remembers” variables from the outer function even after the outer function has returned.
+
+Use cases:
+1. Data Privacy – Hide variables.
+2. Maintaining State – Keep track of previous values.
+3. Callbacks & Event Handlers - Useful when passing functions around; they can access the outer scope variables they were created with.
+4. Functional Programming – Currying, memoization, etc.
+
+ ✨ In short: Closures are most useful when you need private variables, state persistence, or context preservation.
+
+Example:
+function counter() {
+  let count = 0;
+  return function() {
+    count++;
+    return count;
+  };
+}
+const increment = counter();
+console.log(increment()); // 1
+console.log(increment()); // 2
+
+Lexical Scope:
+A function’s scope is determined by where it is defined in the code.
+Inner functions can access outer function variables, not vice versa.
+`
+  },
+  {
+    questionId: 7,
+    question: "What is IIFE (Immediately Invoked Function Expression)?",
+    definition: `
+An IIFE is a function that runs immediately after it is defined.
+
+Example:
+(function () {
+  console.log("IIFE runs immediately!");
+})();
+`
+  },
+  {
+    questionId: 8,
+    question: "What are Prototypes?",
+    definition: `
+A prototype is an object from which other objects inherit properties and methods.
+
+Prototype Chain:
+If a property/method isn’t found on an object, JS looks up its prototype, then its prototype’s prototype, until it reaches null.
+
+Example:
+const obj = {};
+console.log(obj.toString());
+// Not in obj → found in Object.prototype → returns "[object Object]"
+`
+  },
+  {
+    questionId: 9,
+    question: "How to deep clone an object?",
+    definition: `
+Deep cloning means creating a full copy of an object, including nested objects, 
+so that changes in the copy don’t affect the original.
+
+Modern Method:
+const clone = structuredClone(obj);
+ In Deep Learning : Go to this file console.log("file:///C:/workspace-nisha/01_github/02_Javascript/javascript_project_2022/basic-tut-2025/HTML/JavaScript");
+
+`
+  },
+  {
+    questionId: 10,
+    question: "Difference between == and ===?",
+    definition: `
+== → compares values only (performs type conversion).
+=== → compares both value and type (strict equality).
+
+Example:
+5 == "5"   // true
+5 === "5"  // false
+`
+  },
+  {
+    questionId: 11,
+    question: "Explain 'this' keyword in JS?",
+    definition: `
+The 'this' keyword refers to the object that is currently executing the function. 
+Its value depends on how the function is called.
+
+• Inside an object method → refers to the object.
+• In a regular function → refers to global object (undefined in strict mode).
+• Inside a class or constructor → refers to the instance.
+• Arrow functions → do not have their own 'this'; they inherit from their lexical scope.
+`
+  },
+  {
+    questionId: 12,
+    question: "What is call/apply/bind?",
+    definition: `
+• call → Immediately calls a function with a given 'this' and arguments individually.
+• apply → Immediately calls a function with a given 'this' and arguments as an array.
+• bind → Returns a new function with fixed 'this' and optional preset arguments.
+
+Key difference:
+call/apply = immediate execution.
+bind = delayed (returns a new function).
+
+⚡ Key difference: call/apply = immediate execution, bind = future execution.
+`
+  },
+  {
+    questionId: 13,
+    question: "Explain classes and inheritance?",
+    definition: `
+A class is a blueprint for creating objects — it bundles properties and methods.
+
+Inheritance allows one class (child) to use properties and methods of another class (parent) using 'extends'.
+
+Key points:
+• constructor() runs when a new object is created.
+• super() calls parent constructor.
+• Child classes can override methods.
+• Classes are syntactic sugar over prototypes.
+`
+  },
+  {
+    questionId: 14,
+    question: "What are Promises?",
+    definition: `
+A Promise represents the eventual completion (or failure) of an asynchronous operation.
+
+States:
+• Pending → initial.
+• Fulfilled → resolved successfully.
+• Rejected → failed.
+
+Use .then() for success, .catch() for errors, .finally() for cleanup.
+`
+  },
+  {
+    questionId: 15,
+    question: "Explain Async/Await?",
+    definition: `
+Async/Await (ES2017) are built on top of Promises.
+
+• async → makes a function return a Promise.
+• await → pauses execution until a Promise resolves/rejects.
+• Helps avoid callback hell.
+
+Promise = chaining
+async/await = clean synchronous-like code.
+`
+  },
+  {
+    questionId: 16,
+    question: "Explain Promises and async/await together?",
+    definition: `
+Execution Order (Event Loop):
+
+1. Sync code runs first (Start, End).
+2. Microtasks (Promises, await) run next.
+3. Macrotasks (setTimeout) run last.
+
+Example Output:
+Start
+Inside async
+End
+Promise then
+After await
+setTimeout
+
+Synchronous → Microtasks → Macrotasks.
+
+console.log("Check Other practice => file:///C:/workspace-nisha/01_github/02_Javascript/javascript_project_2022/basic-tut-2025/HTML/promiseAsyncAwait.html");
+Spoken Answer : 
+                    *"In JavaScript, execution follows the event loop model. First, synchronous code runs top to bottom. After
+                     that, microtasks like Promise.then() and await callbacks run before macrotasks like setTimeout.
+
+                    Promises are objects representing the result of an async operation, and we handle them with .then() or
+                     .catch(). Async/await is built on top of Promises and makes async code look synchronous, improving readability.
+
+                    For example, if I combine setTimeout, Promises, and async/await, the order is always: sync code first, 
+                    then microtasks from Promises or await, and finally macrotasks like setTimeout. This is why understanding the 
+                    event loop is crucial when debugging async behavior."*
+                     Chcek => "js_async_cheatsheet.pdf"
+`
+  },
+  {
+    questionId: 17,
+    question: "What are sequential promises?",
+    definition: `
+Sequential Promises:
+Execute one after another — each waits for the previous to resolve.
+• Useful when tasks are dependent on each other.   
+
+Parallel Promises:
+Run simultaneously — independent tasks that don’t wait for each other.
+• Useful when tasks are independent.
+`
+  },
+  {
+    questionId: 18,
+    question: "Explain the event loop?",
+    definition: `
+The event loop continuously checks the call stack and callback/microtask queues,
+allowing asynchronous operations without blocking the main thread.
+
+Cycle:
+Call Stack → Microtask Queue (Promises) → Macrotask Queue (setTimeout, I/O)
+`
+  },
+  {
+    questionId: 19,
+    question: "Explain Debounce & Throttle?",
+    definition: `
+Debounce:
+Delays a function’s execution until after a specified time of no calls — great for search boxes.
+mainly used to improve performance
+
+Throttle:
+Executes a function at fixed intervals — great for scroll or resize events.
+
+Difference:
+Debounce waits for silence.
+Throttle runs on schedule.
+
+Example:
+Debounce: Typing → run after user stops.
+Throttle: Scrolling → run every 200ms.
+`
+  },
+  {
+    questionId: 20,
+    question: "Difference between process.nextTick and setImmediate (Node-specific)?",
+    definition: `
+process.nextTick → Runs immediately after the current function, before event loop continues.
+setImmediate → Runs on the next event loop cycle (after I/O).
+
+Use Cases:
+• nextTick – urgent microtasks.
+• setImmediate – defer heavy tasks post I/O.
+
+Not Required for answer:
+To use Node-specific features (process) inside the browser, which doesn’t have them.
+`
+  },
+  {
+    questionId: 21,
+    question: "How many things do you know about JS?",
+    definition: `
+JavaScript is a high-level, versatile language for building dynamic web applications.\nI have a strong grasp of its fundamentals, including ES6 features, async programming, and frameworks like React, Angular, Vue, and Node.js for full-stack development.
+`
+  },
+  { 
+        questionId: 22, 
+        question: "What is ES6?", 
+        definition : `
+ES6 is the 2015 update to JavaScript that introduced modern features\n like let, const, arrow functions, classes, modules, and promises — making code cleaner, easier, and more efficient.
+` 
+  },
+  {
+    questionId: 23,
+    question: "What is the difference between Real DOM and Virtual DOM?",
+    definition: `
+Real DOM:
+    • Represents the actual structure of the webpage in the browser.
+    • When a change occurs, the entire page or large sections re-render — making it slower.
+
+Virtual DOM:
+    \n• A lightweight copy of the Real DOM used by frameworks like React.
+    \n• It updates only the modified parts by comparing (diffing) the Virtual DOM with the Real DOM — making it faster and more efficient.
+
+In Short:
+    • Real DOM: Updates the whole UI directly — slower.
+    • Virtual DOM: Updates only what’s changed — faster and smoother.
+`
+  },
+{
+    questionId: 24,
+    question: "What are Web Selectors?",
+    definition: `
+A web selector (also called as CSS selector) is a pattern used in web development to sleect and target specific HTML elements on a webpage,
+so you can apply style (using css) or manipulate them (using javascript). 
+In short- selectors tell the browser “which element(s) this rule applies to.
+
+1. The Universal Selector (*) selects all elements on a webpage.  
+   Example:
+   * {
+     margin: 0;
+     padding: 0;
+   }
+
+2. The Element Selector (div, p, h1, etc.) targets all elements of a specific type.  
+   Example:
+   p {
+     color: blue;
+   }
+
+3. The Class Selector (.classname) targets elements with a specific class attribute.  
+   Example:
+   .highlight {
+     background-color: yellow;
+   }
+
+4. The ID Selector (#idname) targets a unique element with a specific ID.  
+   Example:
+   #header {
+     font-size: 20px;
+   }
+
+5. The Attribute Selector ([attr=value]) selects elements with a particular attribute or value.  
+   Example:
+   input[type="text"] {
+     border: 1px solid gray;
+   }
+
+6. The Descendant Selector (parent child) targets elements nested inside another element.  
+   Example:
+   div p {
+     color: green;
+   }
+
+7. The Pseudo-class Selector (:hover, :nth-child(), etc.) targets elements based on their state or position.  
+   Example:
+   a:hover {
+     color: red;
+   }
+
+8. The Pseudo-element Selector (::before, ::after) styles specific parts of an element.  
+   Example:
+   p::first-letter {
+     font-size: 24px;
+   }
+
+9. In JavaScript, selectors are also used to access elements.  
+   Example:
+   document.querySelector(".btn");      // Selects the first element with class "btn"
+   document.querySelectorAll("p");      // Selects all <p> elements
+   document.getElementById("header");   // Selects the element with ID "header"
+`
+  },
+      { questionId: 25, question: "Explain Web Storage, Cookies, Session Storage, Local Storage?", definition : "Test 123" },
+      { questionId: 26, question: "Client-side vs Server-side rendering?", definition : "Test 123" },
+      { questionId: 27, question: "Is JavaScript multithreaded or single-threaded?", definition : "Test 123" },
+      { questionId: 28, question: "Difference between one-way and two-way binding?", definition : "Test 123" },
+      { questionId: 29, question: "How to validate String, Object, and Array?", definition : "Test 123" },
+      { questionId: 30, question: "Explain Array methods?", definition : "Test 123" },
+      { questionId: 31, question: "Explain map, filter, and reduce?", definition : "Test 123" },
+      { questionId: 32, question: "What are Higher-Order Functions?", definition : "Test 123" },
+      { questionId: 33, question: "Difference between splice, slice, and reduce?", definition : "Test 123" },
+      { questionId: 34, question: "Difference between includes() and find()?", definition : "Test 123" },
+      { questionId: 35, question: "What is the spread operator?", definition : "Test 123" },
+      { questionId: 36, question: "Difference between deep and shallow copy?", definition : "Test 123" },
+      { questionId: 37, question: "What is a key?", definition : "Test 123" },
+      { questionId: 38, question: "How many loops are used in JS?", definition : "Test 123" },
+      { questionId: 39, question: "Difference between for loop and forEach loop?", definition : "Test 123" },
+      { questionId: 40, question: "Difference between vanilla JS and JS frameworks?", definition : "Test 123" },
+      { questionId: 41, question: "What is an anonymous function?", definition : "Test 123" },
+      { questionId: 42, question: "Explain isNaN() function?", definition : "Test 123" },
+      { questionId: 43, question: "How to handle exceptions in JS?", definition : "Test 123" },
+      { questionId: 44, question: "What is event bubbling?", definition : "Test 123" },
+      { questionId: 45, question: "What is event propagation?", definition : "Test 123" },
+      { questionId: 46, question: "How to fix a 404 error?", definition : "Test 123" },
+      { questionId: 47, question: "What is a CORS issue and what is a proxy?", definition : "Test 123" },
+      { questionId: 48, question: "Explain HTTP request methods?", definition : "Test 123" },
+      { questionId: 49, question: "Explain HTTP status codes (400, 401, 404, 500, 502)?", definition : "Test 123" },
+      { questionId: 50, question: "What is a recursive function?", definition : "Test 123" },
+      { questionId: 51, question: "Explain JWT?", definition : "Test 123" },
+      { questionId: 52, question: "Currying, memoization?", definition : "Test" }
+];
+    const grid = document.getElementById("questionGrid");
+    const definitionBox = document.getElementById("definitionBox");
+    const defTitle = document.getElementById("defTitle");
+    const defContent = document.getElementById("defContent");
+
+    jsInterviewQuestions.forEach((item) => {
+      const card = document.createElement("div");
+      card.classList.add("question-card");
+      card.innerHTML = `
+        <div class="question-id">#${item.questionId}</div>
+        <div class="question-text">${item.question}</div>
+      `;
+      card.addEventListener("click", () => {
+        defTitle.textContent = `Question ${item.questionId}: ${item.question}`;
+        defContent.textContent = item.definition;
+        definitionBox.classList.add("active");
+        definitionBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>
