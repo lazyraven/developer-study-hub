@@ -59,12 +59,42 @@
     html {
       scroll-behavior: smooth;
     }
+
+     /* === Back to Top Button Styling === */
+    #backToTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background-color: #b366ff;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #b366ff80;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    #backToTopBtn:hover {
+      background-color: #9933ff;
+      box-shadow: 0 0 20px #b366ff;
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
-
-  <div class="question-grid" id="questionGrid"></div>
+<div>
+  <h4><a class="blue" target="_blank" href="https://fullstack-interview-roadmap.netlify.app/">fullstack-interview-roadmap solution | ✅ Week 1 – Core JavaScript (1-20 Que)and | ✅ Week 5 – JS And Other Topics (Start from Que 21)</a>
+</div>
+    <div class="question-grid" id="questionGrid"></div>
   <div id="definitionContainer"></div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTopBtn" title="Go to top">↑</button>
 
   <script>
     const PLAN = [
@@ -608,6 +638,22 @@ In short- selectors tell the browser “which element(s) this rule applies to.
         setTimeout(() => target.classList.remove("highlight"), 1500);
       }
     }
+
+    
+    // === Back to Top Button Logic ===
+    const backToTopBtn = document.getElementById("backToTopBtn");
+
+    window.addEventListener("scroll", () => {
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        backToTopBtn.style.display = "block";
+      } else {
+        backToTopBtn.style.display = "none";
+      }
+    });
+
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
   </script>
 </body>
 </html>
