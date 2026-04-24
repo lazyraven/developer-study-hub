@@ -1,1064 +1,1219 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AWS DevOps Roadmap</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Q&A Plan</title>
 <style>
-  :root[data-theme="dark"] {
-    --bg: #0a0c10;
-    --bg2: #0f1219;
-    --bg3: #161b26;
-    --surface: #1c2333;
-    --surface2: #232d42;
-    --border: #2a3550;
-    --text: #e8edf5;
-    --text2: #8b9ab5;
-    --text3: #5a6a88;
+    body {
+        background-color: #111;
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
 
-    --c1: #ff6b35;   /* orange - CI/CD */
-    --c2: #00c9a7;   /* teal - AWS Core */
-    --c3: #a78bfa;   /* purple - IaC */
-    --c4: #f59e0b;   /* amber - Monitoring */
-    --c5: #ef4444;   /* red - Security */
-    --c6: #38bdf8;   /* sky - Containers */
-    --c7: #34d399;   /* green - Projects */
-    --c8: #f472b6;   /* pink - Plan */
+    .question-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+    }
 
-    --glow1: rgba(255,107,53,0.15);
-    --glow2: rgba(0,201,167,0.15);
-    --glow3: rgba(167,139,250,0.15);
-  }
-  :root[data-theme="light"] {
-    --bg: #f0f4fb;
-    --bg2: #e8eef8;
-    --bg3: #dde5f5;
-    --surface: #ffffff;
-    --surface2: #f5f8ff;
-    --border: #c9d5ee;
-    --text: #1a2340;
-    --text2: #4a5a7a;
-    --text3: #7a8aaa;
+    .question-card {
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s;
+        text-align: center;
+        line-height: 1.3;
+    }
 
-    --c1: #e05a20;
-    --c2: #009e82;
-    --c3: #7c5fd4;
-    --c4: #c27c00;
-    --c5: #cc2222;
-    --c6: #1a9fd4;
-    --c7: #20a870;
-    --c8: #d44090;
+    .question-card:hover {
+        background-color: #272727;
+    }
 
-    --glow1: rgba(224,90,32,0.08);
-    --glow2: rgba(0,158,130,0.08);
-    --glow3: rgba(124,95,212,0.08);
-  }
+    .definition-section {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 25px;
+        transition: all 0.4s ease;
+    }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+    .definition-section.highlight {
+        border: 2px solid #b366ff;
+        box-shadow: 0 0 15px #b366ff66;
+        background: #2a1a3a;
+    }
 
-  body {
-    font-family: 'DM Mono', monospace;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    transition: background 0.3s, color 0.3s;
-    overflow-x: hidden;
-  }
+    .definition-section h3 {
+        color: #b366ff;
+        margin-bottom: 8px;
+    }
 
-  /* GRID BG */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: 
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 40px 40px;
-    opacity: 0.18;
-    pointer-events: none;
-    z-index: 0;
-  }
+    html {
+        scroll-behavior: smooth;
+    }
 
-  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+    /* === Back to Top Button Styling === */
+    #backToTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background-color: #b366ff;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+        cursor: pointer;
+        box-shadow: 0 0 10px #b366ff80;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
 
-  /* HEADER */
-  header {
-    padding: 48px 0 32px;
-    text-align: center;
-    position: relative;
-  }
-  .badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--c2);
-    border: 1px solid var(--c2);
-    padding: 4px 14px;
-    border-radius: 2px;
-    margin-bottom: 18px;
-  }
-  header h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.2rem, 6vw, 4rem);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -2px;
-    background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 50%, var(--c3) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  header p {
-    margin-top: 12px;
-    font-size: 14px;
-    color: var(--text2);
-    letter-spacing: 0.5px;
-  }
+    #backToTopBtn:hover {
+        background-color: #9933ff;
+        box-shadow: 0 0 20px #b366ff;
+        transform: scale(1.1);
+    }
+    /* === Floating Theme Toggle Button === */
+    #themeToggle {
+        position: fixed;
+        top: 20px;
+        right: 25px;
+        z-index: 1100;
+        cursor: pointer;
+        background: #fff;
+        color: #0d6efd;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 30px;
+        font-weight: bold;
+        font-size: 14px;
+        box-shadow: 0 0 10px #b366ff60;
+        transition: all 0.3s ease;
+    }
 
-  /* THEME TOGGLE */
-  .theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 100;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 50px;
-    padding: 6px;
-    display: flex;
-    gap: 4px;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  }
-  .theme-toggle button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 50px;
-    font-size: 14px;
-    color: var(--text3);
-    transition: all 0.2s;
-  }
-  .theme-toggle button.active {
-    background: var(--surface2);
-    color: var(--text);
-  }
+    #themeToggle:hover {
+        transform: scale(1.1);
+        background: #0d6efd;
+        color: #fff;
+        box-shadow: 0 0 15px #b366ff90;
+    }
 
-  /* SECTION */
-  section { margin-bottom: 60px; }
-  .section-label {
-    font-size: 10px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 8px;
-  }
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
-    font-weight: 700;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .section-title .icon {
-    width: 36px; height: 36px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
+    /* === Smooth Fade Animation for Theme Switch === */
+    body {
+        transition: background-color 0.5s ease, color 0.5s ease;
+    }
 
-  /* CARDS GRID */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 16px;
-  }
+    .definition-section,
+    .question-card,
+    #backToTopBtn {
+        transition: background-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
+    }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .card:hover {
-    transform: translateY(-3px);
-  }
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-  }
+    /* === Light Mode === */
+    body.light-mode {
+        background-color: #f5f5f5;
+        color: #111;
+    }
 
-  .card-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .card-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    body.light-mode .question-card {
+        background: #fff;
+        border: 1px solid #ccc;
+        color: #000;
+    }
 
-  .card ul { list-style: none; }
-  .card ul li {
-    font-size: 12.5px;
-    color: var(--text2);
-    padding: 5px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    line-height: 1.5;
-  }
-  .card ul li:last-child { border-bottom: none; }
-  .card ul li::before {
-    content: '▸';
-    font-size: 10px;
-    margin-top: 2px;
-    flex-shrink: 0;
-    opacity: 0.6;
-  }
+    body.light-mode .question-card:hover {
+        background-color: #f0f0f0;
+    }
 
-  .interview-box {
-    margin-top: 14px;
-    background: var(--bg3);
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 12px;
-    line-height: 1.6;
-  }
-  .interview-box .q { color: var(--c4); margin-bottom: 4px; }
-  .interview-box .a { color: var(--text2); }
+    body.light-mode .definition-section {
+        background: #fff;
+        border: 1px solid #ddd;
+        color: #000;
+    }
 
-  /* PRIORITY TOPICS */
-  .priority-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .priority-tag {
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    border: 1px solid;
-    transition: transform 0.15s;
-    cursor: default;
-  }
-  .priority-tag:hover { transform: scale(1.04); }
+    body.light-mode .definition-section h3 {
+        color: #7a3fff;
+    }
 
-  /* WEEK PLAN */
-  .weeks-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
-  }
-  .week-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .week-header {
-    padding: 14px 20px;
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .week-header .week-num {
-    font-size: 11px;
-    opacity: 0.8;
-    letter-spacing: 1px;
-  }
-  .week-body { padding: 16px 20px; }
-  .week-body .day {
-    font-size: 12px;
-    color: var(--text2);
-    padding: 4px 0;
-    display: flex;
-    gap: 10px;
-    align-items: baseline;
-  }
-  .day-num {
-    font-size: 10px;
-    color: var(--text3);
-    min-width: 45px;
-  }
-  .week-project {
-    margin-top: 12px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 11.5px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+    body.light-mode #backToTopBtn {
+        background-color: #7a3fff;
+    }
 
-  /* PROJECTS */
-  .project-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    position: relative;
-    overflow: hidden;
-  }
-  .project-card + .project-card { margin-top: 16px; }
-  .project-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 16px;
-  }
-  .arch-flow {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .arch-node {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-  }
-  .arch-arrow { color: var(--text3); font-size: 14px; }
-  .feature-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .feature-chip {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-size: 11.5px;
-    color: var(--text2);
-  }
+    body.light-mode #themeToggle {
+        background: #0d6efd;
+        color: #fff;
+    }
 
-  /* COMMANDS */
-  .cmd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-  .cmd-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 16px;
-  }
-  .cmd-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
-  .cmd { font-size: 12px; color: var(--c2); line-height: 1.8; }
-
-  /* REFERENCES */
-  .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
-  .ref-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 18px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    color: var(--text);
-    transition: transform 0.2s, border-color 0.2s;
-  }
-  .ref-card:hover { transform: translateY(-2px); border-color: var(--c2); }
-  .ref-icon { font-size: 22px; }
-  .ref-info .ref-title { font-size: 13px; font-weight: 600; }
-  .ref-info .ref-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
-
-  /* DIVIDER */
-  .divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 48px 0;
-  }
-
-  /* PROGRESS BAR (decorative) */
-  .timeline-bar {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 28px;
-  }
-  .timeline-bar .seg {
-    flex: 1;
-    height: 4px;
-    border-radius: 2px;
-    opacity: 0.8;
-  }
-
-  /* COLOR CLASSES */
-  .ci   { --cc: var(--c1); }
-  .aws  { --cc: var(--c2); }
-  .iac  { --cc: var(--c3); }
-  .mon  { --cc: var(--c4); }
-  .sec  { --cc: var(--c5); }
-  .con  { --cc: var(--c6); }
-  .proj { --cc: var(--c7); }
-  .plan { --cc: var(--c8); }
-
-  .card.ci::before   { background: var(--c1); }
-  .card.aws::before  { background: var(--c2); }
-  .card.iac::before  { background: var(--c3); }
-  .card.mon::before  { background: var(--c4); }
-  .card.sec::before  { background: var(--c5); }
-  .card.con::before  { background: var(--c6); }
-  .card.proj::before { background: var(--c7); }
-  .card.plan::before { background: var(--c8); }
-
-  .card.ci:hover  { box-shadow: 0 8px 40px var(--glow1); }
-  .card.aws:hover { box-shadow: 0 8px 40px var(--glow2); }
-  .card.iac:hover { box-shadow: 0 8px 40px var(--glow3); }
-
-  .dot-ci   { background: var(--c1); }
-  .dot-aws  { background: var(--c2); }
-  .dot-iac  { background: var(--c3); }
-  .dot-mon  { background: var(--c4); }
-  .dot-sec  { background: var(--c5); }
-  .dot-con  { background: var(--c6); }
-  .dot-proj { background: var(--c7); }
-  .dot-plan { background: var(--c8); }
-
-  .icon-ci   { background: rgba(255,107,53,0.15); }
-  .icon-aws  { background: rgba(0,201,167,0.15); }
-  .icon-iac  { background: rgba(167,139,250,0.15); }
-  .icon-mon  { background: rgba(245,158,11,0.15); }
-  .icon-sec  { background: rgba(239,68,68,0.15); }
-  .icon-con  { background: rgba(56,189,248,0.15); }
-  .icon-proj { background: rgba(52,211,153,0.15); }
-  .icon-plan { background: rgba(244,114,182,0.15); }
-
-  .tag-ci   { color: var(--c1); border-color: rgba(255,107,53,0.3); background: rgba(255,107,53,0.08); }
-  .tag-aws  { color: var(--c2); border-color: rgba(0,201,167,0.3); background: rgba(0,201,167,0.08); }
-  .tag-iac  { color: var(--c3); border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.08); }
-  .tag-mon  { color: var(--c4); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.08); }
-  .tag-sec  { color: var(--c5); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.08); }
-  .tag-con  { color: var(--c6); border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.08); }
-  .tag-proj { color: var(--c7); border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.08); }
-  .tag-plan { color: var(--c8); border-color: rgba(244,114,182,0.3); background: rgba(244,114,182,0.08); }
-
-  /* Week colors */
-  .wk1 { background: linear-gradient(135deg, rgba(244,114,182,0.9), rgba(244,114,182,0.7)); color: #fff; }
-  .wk2 { background: linear-gradient(135deg, rgba(0,201,167,0.9), rgba(0,201,167,0.7)); color: #fff; }
-  .wk3 { background: linear-gradient(135deg, rgba(255,107,53,0.9), rgba(255,107,53,0.7)); color: #fff; }
-  .wk4 { background: linear-gradient(135deg, rgba(56,189,248,0.9), rgba(56,189,248,0.7)); color: #fff; }
-  .wk5 { background: linear-gradient(135deg, rgba(167,139,250,0.9), rgba(167,139,250,0.7)); color: #fff; }
-  .wk6 { background: linear-gradient(135deg, rgba(245,158,11,0.9), rgba(245,158,11,0.7)); color: #fff; }
-
-  .proj-bg1 { background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.3); color: var(--c1); }
-  .proj-bg2 { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.3); color: var(--c7); }
-
-  .node-a { background: rgba(255,107,53,0.15); color: var(--c1); }
-  .node-b { background: rgba(0,201,167,0.15); color: var(--c2); }
-  .node-c { background: rgba(56,189,248,0.15); color: var(--c6); }
-  .node-d { background: rgba(167,139,250,0.15); color: var(--c3); }
-  .node-e { background: rgba(52,211,153,0.15); color: var(--c7); }
-
-  footer {
-    text-align: center;
-    padding: 32px 0 48px;
-    font-size: 12px;
-    color: var(--text3);
-    border-top: 1px solid var(--border);
-    margin-top: 20px;
-  }
-
-  @media (max-width: 640px) {
-    .cards-grid, .weeks-grid { grid-template-columns: 1fr; }
-    .theme-toggle { top: 12px; right: 12px; }
-    header { padding: 40px 0 24px; }
-    .timeline-bar { display: none; }
-  }
+    /* === Responsive Adjustments === */
+    @media (max-width: 600px) {
+        #themeToggle {
+            top: 15px;
+            right: 15px;
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+    }
+    pre{
+        font-size: 16px;
+    }
 </style>
 </head>
-<body>
+<body> ✅ Week 1 and ✅ Week 5 – JS And Other Topics
+<button id="themeToggle">☀️ Light</button>
+<div>
+    <h4><a target="_target"
+            href="https://fullstack-interview-roadmap.netlify.app/">fullstack-interview-roadmap solution | ✅ Week 1 –
+            Core JavaScript (1-20 Que)and | ✅ Week 5 – JS And Other Topics (Start from Que 21)</a>
+    </h4>
 
-<!-- THEME TOGGLE -->
-<div class="theme-toggle" id="themeToggle">
-  <button id="btnDark" class="active" onclick="setTheme('dark')">🌙 Dark</button>
-  <button id="btnLight" onclick="setTheme('light')">☀️ Light</button>
+   <a href="https://notebooklm.google.com/notebook/b63600f7-7d1c-4357-9c56-857a64770cf1" target="_blank">   Google NotebookLM - Mindgap : https://notebooklm.google.com/notebook/b63600f7-7d1c-4357-9c56-857a64770cf1</a>
+   <p>NotebookLM : I've created the chart based on this theory.</p>
 </div>
+  <div class="question-grid" id="questionGrid"></div>
+  <div id="definitionContainer"></div>
 
-<div class="container">
+  <!-- Back to Top Button -->
+  <button id="backToTopBtn" title="Go to top">↑</button>
 
-  <!-- HEADER -->
-  <header>
-    <div class="badge">Complete Learning Path</div>
-    <h1>AWS DevOps Roadmap</h1>
-    <p>Interview-ready · Real-world focused · 42-day plan</p>
-  </header>
+  <script>
+const jsInterviewQuestions = [
+  {
+    questionId: 1,
+    question: "What is JavaScript?",
+    definition: `
+JavaScript (JS) is a high-level, interpreted programming language mainly used to make web pages interactive, dynamic, and functional.
+It runs in the browser as well as on servers (using Node.js).
 
-  <!-- TIMELINE BAR -->
-  <div class="timeline-bar">
-    <div class="seg" style="background:var(--c8)"></div>
-    <div class="seg" style="background:var(--c2)"></div>
-    <div class="seg" style="background:var(--c1)"></div>
-    <div class="seg" style="background:var(--c6)"></div>
-    <div class="seg" style="background:var(--c3)"></div>
-    <div class="seg" style="background:var(--c4)"></div>
-    <div class="seg" style="background:var(--c5)"></div>
-    <div class="seg" style="background:var(--c7)"></div>
-  </div>
+👉 With JS, you can:
+• Manipulate the DOM (change HTML/CSS dynamically).
+• Handle user events (clicks, forms, etc.).
+• Communicate with servers (API calls).
+• Build full-stack applications.
 
-  <!-- SECTION 1: CORE CONCEPTS -->
-  <section>
-    <div class="section-label">Step 01</div>
-    <div class="section-title">
-      <span class="icon icon-plan">🏗️</span>
-      Core DevOps Concepts
-    </div>
-    <div class="cards-grid">
+In short: HTML gives structure, CSS gives style, and JavaScript gives behavior to web applications.
+`
+  },
+  {
+    questionId: 2,
+    question: "var vs let vs const?",
+    definition: `
+In JavaScript:
+• var → function-scoped and allows redeclaration.
+• let → block-scoped, can be reassigned but not redeclared.
+• const → block-scoped, cannot be reassigned.
 
-      <div class="card plan">
-        <div class="card-title">
-          <span class="card-dot dot-plan"></span>DevOps Lifecycle
-        </div>
-        <ul>
-          <li>Plan → Code → Build → Test → Deploy → Monitor</li>
-          <li>Teams collaborate via Git + automated pipelines</li>
-          <li>Automation reduces manual deployment errors</li>
-          <li>Version control: Feature branch, trunk-based</li>
-          <li>Linux basics: permissions, processes, networking</li>
-        </ul>
-        <div class="interview-box">
-          <div class="q">Q: Why is DevOps important?</div>
-          <div class="a">A: Reduces release time, improves reliability, and enables continuous delivery through automation.</div>
-        </div>
-      </div>
+Example:
+var x = 10;  // function scope
+let y = 20;  // block scope
+const z = 30; // cannot reassign
+`
+  },
+  {
+    questionId: 3,
+    question: "What is Scope?",
+    definition: `
+Scope defines the accessibility or visibility of variables, functions, and objects in different parts of the code.
 
-      <div class="card ci">
-        <div class="card-title">
-          <span class="card-dot dot-ci"></span>CI/CD Pipelines
-        </div>
-        <ul>
-          <li>Pipeline stages: Build → Test → Package → Deploy</li>
-          <li>CI vs CD vs Continuous Deployment</li>
-          <li>Tools: Jenkins, GitHub Actions</li>
-          <li>Pipeline as Code (YAML format)</li>
-          <li>Rollbacks & failure handling strategies</li>
-        </ul>
-        <div class="interview-box">
-          <div class="q">Q: How do you handle a failed deployment?</div>
-          <div class="a">A: Rollback to previous stable version, use health checks, set up automated alerts.</div>
-        </div>
-      </div>
+Types of scope:
+1. Global Scope – variables accessible everywhere.
+2. Function Scope – variables declared inside a function are local to that function.
+3. Block Scope – variables declared using let and const inside {} are not accessible outside.
+`
+  },
+  {
+    questionId: 4,
+    question: "What is hoisting?",
+    definition: `
+Hoisting means variable and function declarations are moved to the top of their scope before code execution.
 
-      <div class="card plan">
-        <div class="card-title">
-          <span class="card-dot dot-plan"></span>Git Workflows
-        </div>
-        <ul>
-          <li>Feature branch workflow — isolated development</li>
-          <li>Trunk-based development — fast integration</li>
-          <li>Pull requests + code reviews</li>
-          <li>Commit conventions & tagging</li>
-          <li>Merge strategies: squash, rebase, merge</li>
-        </ul>
-      </div>
+👉 Behavior:
+var → hoisted with default value undefined.
+let → hoisted but in the temporal dead zone (ReferenceError if accessed early).
+const → hoisted but must be initialized at declaration.
 
-    </div>
-  </section>
+Example:
+console.log(a); // undefined
+var a = 10;
 
-  <div class="divider"></div>
+console.log(b); // ReferenceError
+let b = 20;
 
-  <!-- SECTION 2: AWS CORE -->
-  <section>
-    <div class="section-label">Step 02 — HIGH PRIORITY</div>
-    <div class="section-title">
-      <span class="icon icon-aws">☁️</span>
-      AWS Core Services
-    </div>
-    <div class="cards-grid">
+console.log(c); // ReferenceError
+const c = 30;
+`
+  },
+  {
+    questionId: 5,
+    question: "What is a function?",
+    definition: `
+A function is a reusable block of code designed to perform a specific task.
 
-      <div class="card aws">
-        <div class="card-title">
-          <span class="card-dot dot-aws"></span>Compute
-        </div>
-        <ul>
-          <li><strong style="color:var(--c2)">EC2</strong> — Virtual machines, scalable compute</li>
-          <li><strong style="color:var(--c2)">Lambda</strong> — Serverless, event-driven functions</li>
-          <li><strong style="color:var(--c2)">ECS / EKS</strong> — Managed containers & Kubernetes</li>
-          <li>Auto Scaling Groups for high availability</li>
-          <li>Spot instances for cost optimization</li>
-        </ul>
-        <div class="interview-box">
-          <div class="q">Q: EC2 vs Lambda?</div>
-          <div class="a">A: EC2 for persistent, long-running workloads. Lambda for short, event-driven, stateless functions with auto-scaling.</div>
-        </div>
-      </div>
+Functions help to:
+• Organize code into smaller parts.
+• Reuse logic without rewriting.
+• Improve readability and maintainability.
+`
+  },
+  {
+    questionId: 6,
+    question: "What is a closure? When is it useful? What is Lexical Scope?",
+    definition: `
+A closure is created when a function is defined inside another function and 
+the inner function “remembers” variables from the outer function even after the outer function has returned.
 
-      <div class="card aws">
-        <div class="card-title">
-          <span class="card-dot dot-aws"></span>Storage & Database
-        </div>
-        <ul>
-          <li><strong style="color:var(--c2)">S3</strong> — Object storage, static hosting, artifacts</li>
-          <li><strong style="color:var(--c2)">EBS</strong> — Block storage attached to EC2</li>
-          <li><strong style="color:var(--c2)">RDS</strong> — Managed SQL (MySQL, PostgreSQL)</li>
-          <li><strong style="color:var(--c2)">DynamoDB</strong> — Serverless NoSQL</li>
-          <li>S3 storage classes: Standard, IA, Glacier</li>
-        </ul>
-      </div>
+Use cases:
+1. Data Privacy – Hide variables.
+2. Maintaining State – Keep track of previous values.
+3. Callbacks & Event Handlers - Useful when passing functions around; they can access the outer scope variables they were created with.
+4. Functional Programming – Currying, memoization, etc.
 
-      <div class="card aws">
-        <div class="card-title">
-          <span class="card-dot dot-aws"></span>Networking
-        </div>
-        <ul>
-          <li><strong style="color:var(--c2)">VPC</strong> — Isolated virtual network</li>
-          <li>Subnets: public vs private</li>
-          <li><strong style="color:var(--c2)">ALB / NLB</strong> — Application & Network Load Balancer</li>
-          <li>Route Tables + Internet Gateway</li>
-          <li>Security Groups vs Network ACLs</li>
-        </ul>
-      </div>
+ ✨ In short: Closures are most useful when you need private variables, state persistence, or context preservation.
 
-      <div class="card aws">
-        <div class="card-title">
-          <span class="card-dot dot-aws"></span>Real-World Combos
-        </div>
-        <ul>
-          <li>EC2 + ALB + RDS — Traditional web app</li>
-          <li>Lambda + API Gateway + DynamoDB — Serverless API</li>
-          <li>ECS + ECR + ALB — Containerized app</li>
-          <li>S3 + CloudFront — Static site CDN</li>
-          <li>CodePipeline + CodeBuild + ECS — Full CI/CD</li>
-        </ul>
-      </div>
+Example:
+function counter() {
+  let count = 0;
+  return function() {
+    count++;
+    return count;
+  };
+}
+const increment = counter();
+console.log(increment()); // 1
+console.log(increment()); // 2
 
-    </div>
-  </section>
+Lexical Scope:
+A function’s scope is determined by where it is defined in the code.
+Inner functions can access outer function variables, not vice versa.
+`
+  },
+  {
+    questionId: 7,
+    question: "What is IIFE (Immediately Invoked Function Expression)?",
+    definition: `
+An IIFE is a function that runs immediately after it is defined.
 
-  <div class="divider"></div>
+Example:
+(function () {
+  console.log("IIFE runs immediately!");
+})();
+`
+  },
+  {
+    questionId: 8,
+    question: "What are Prototypes?",
+    definition: `
+A prototype is an object from which other objects inherit properties and methods.
 
-  <!-- SECTION 3: IaC + Containers -->
-  <section>
-    <div class="section-label">Step 03</div>
-    <div class="section-title">
-      <span class="icon icon-iac">⚙️</span>
-      Infrastructure as Code + Containers
-    </div>
-    <div class="cards-grid">
+Prototype Chain:
+If a property/method isn’t found on an object, JS looks up its prototype, then its prototype’s prototype, until it reaches null.
 
-      <div class="card iac">
-        <div class="card-title">
-          <span class="card-dot dot-iac"></span>Terraform
-        </div>
-        <ul>
-          <li>Write declarative HCL configs</li>
-          <li>Create EC2, VPC, subnets via code</li>
-          <li>Variables, modules, outputs</li>
-          <li>Remote state in S3 + DynamoDB lock</li>
-          <li>Plan → Apply → Destroy workflow</li>
-        </ul>
-        <div class="interview-box">
-          <div class="q">Q: Why IaC?</div>
-          <div class="a">A: Repeatability, version control, automated provisioning, and reduced human error.</div>
-        </div>
-      </div>
+Example:
+const obj = {};
+console.log(obj.toString());
+// Not in obj → found in Object.prototype → returns "[object Object]"
+`
+  },
+  {
+    questionId: 9,
+    question: "How to deep clone an object?",
+    definition: `
+Deep cloning means creating a full copy of an object, including nested objects, 
+so that changes in the copy don’t affect the original.
 
-      <div class="card iac">
-        <div class="card-title">
-          <span class="card-dot dot-iac"></span>CloudFormation
-        </div>
-        <ul>
-          <li>AWS-native IaC using YAML/JSON templates</li>
-          <li>Stacks, nested stacks, change sets</li>
-          <li>Rollback on deployment failure</li>
-          <li>Integrates natively with all AWS services</li>
-          <li>CDK — define infra using Python/TypeScript</li>
-        </ul>
-      </div>
+Modern Method:
+const clone = structuredClone(obj);
+ In Deep Learning : Go to this file console.log("file:///C:/workspace-nisha/01_github/02_Javascript/javascript_project_2022/basic-tut-2025/HTML/JavaScript");
 
-      <div class="card con">
-        <div class="card-title">
-          <span class="card-dot dot-con"></span>Docker
-        </div>
-        <ul>
-          <li>Dockerfile: FROM, RUN, COPY, EXPOSE, CMD</li>
-          <li>Build image → Push to ECR registry</li>
-          <li>Multi-stage builds for smaller images</li>
-          <li>docker-compose for local dev</li>
-          <li>Layer caching best practices</li>
-        </ul>
-      </div>
+`
+  },
+  {
+    questionId: 10,
+    question: "Difference between == and ===?",
+    definition: `
+== → compares values only (performs type conversion).
+=== → compares both value and type (strict equality).
 
-      <div class="card con">
-        <div class="card-title">
-          <span class="card-dot dot-con"></span>ECS / EKS
-        </div>
-        <ul>
-          <li>ECS Fargate — serverless containers</li>
-          <li>Task Definitions & Services</li>
-          <li>EKS — managed Kubernetes on AWS</li>
-          <li>Pods, Deployments, Services, Ingress</li>
-          <li>Horizontal Pod Autoscaler</li>
-        </ul>
-      </div>
+Example:
+5 == "5"   // true
+5 === "5"  // false
+`
+  },
+  {
+    questionId: 11,
+    question: "Explain 'this' keyword in JS?",
+    definition: `
+The 'this' keyword refers to the object that is currently executing the function. 
+Its value depends on how the function is called.
 
-    </div>
-  </section>
+• Inside an object method → refers to the object.
+• In a regular function → refers to global object (undefined in strict mode).
+• Inside a class or constructor → refers to the instance.
+• Arrow functions → do not have their own 'this'; they inherit from their lexical scope.
+`
+  },
+  {
+    questionId: 12,
+    question: "What is call/apply/bind?",
+    definition: `
+• call → Immediately calls a function with a given 'this' and arguments individually.
+• apply → Immediately calls a function with a given 'this' and arguments as an array.
+• bind → Returns a new function with fixed 'this' and optional preset arguments.
 
-  <div class="divider"></div>
+Key difference:
+call/apply = immediate execution.
+bind = delayed (returns a new function).
 
-  <!-- SECTION 4: MONITORING + SECURITY -->
-  <section>
-    <div class="section-label">Step 04</div>
-    <div class="section-title">
-      <span class="icon icon-mon">📊</span>
-      Monitoring, Logging & Security
-    </div>
-    <div class="cards-grid">
+⚡ Key difference: call/apply = immediate execution, bind = future execution.
+`
+  },
+  {
+    questionId: 13,
+    question: "Explain classes and inheritance?",
+    definition: `
+A class is a blueprint for creating objects — it bundles properties and methods.
 
-      <div class="card mon">
-        <div class="card-title">
-          <span class="card-dot dot-mon"></span>Monitoring Tools
-        </div>
-        <ul>
-          <li><strong style="color:var(--c4)">CloudWatch</strong> — Metrics, logs, alarms, dashboards</li>
-          <li><strong style="color:var(--c4)">Prometheus + Grafana</strong> — Open-source monitoring</li>
-          <li><strong style="color:var(--c4)">ELK Stack</strong> — Elasticsearch, Logstash, Kibana</li>
-          <li>CPU, memory, request latency alerts</li>
-          <li>Centralized log aggregation</li>
-        </ul>
-      </div>
+Inheritance allows one class (child) to use properties and methods of another class (parent) using 'extends'.
 
-      <div class="card sec">
-        <div class="card-title">
-          <span class="card-dot dot-sec"></span>IAM & Security
-        </div>
-        <ul>
-          <li><strong style="color:var(--c5)">IAM</strong> — Users, groups, roles, policies</li>
-          <li>Least privilege access principle</li>
-          <li>Never hardcode secrets in code</li>
-          <li><strong style="color:var(--c5)">Secrets Manager / SSM</strong> — Secure secrets storage</li>
-          <li>Security Groups vs NACLs</li>
-        </ul>
-        <div class="interview-box">
-          <div class="q">Q: IAM best practices?</div>
-          <div class="a">A: Least privilege, use roles not users for services, rotate keys, enable MFA, use Secrets Manager.</div>
-        </div>
-      </div>
+Key points:
+• constructor() runs when a new object is created.
+• super() calls parent constructor.
+• Child classes can override methods.
+• Classes are syntactic sugar over prototypes.
+`
+  },
+  {
+    questionId: 14,
+    question: "What are Promises?",
+    definition: `
+A Promise represents the eventual completion (or failure) of an asynchronous operation.
 
-      <div class="card sec">
-        <div class="card-title">
-          <span class="card-dot dot-sec"></span>Deployment Strategies
-        </div>
-        <ul>
-          <li><strong style="color:var(--c5)">Blue-Green</strong> — Two environments, instant swap</li>
-          <li><strong style="color:var(--c5)">Canary</strong> — Gradual traffic shift (5% → 100%)</li>
-          <li><strong style="color:var(--c5)">Rolling</strong> — Replace instances incrementally</li>
-          <li>Feature flags for controlled releases</li>
-          <li>Health check gates before full rollout</li>
-        </ul>
-      </div>
+States:
+• Pending → initial.
+• Fulfilled → resolved successfully.
+• Rejected → failed.
 
-    </div>
-  </section>
+Use .then() for success, .catch() for errors, .finally() for cleanup.
+`
+  },
+  {
+    questionId: 15,
+    question: "Explain Async/Await?",
+    definition: `
+Async/Await (ES2017) are built on top of Promises.
 
-  <div class="divider"></div>
+• async → makes a function return a Promise.
+• await → pauses execution until a Promise resolves/rejects.
+• Helps avoid callback hell.
 
-  <!-- PRIORITY TOPICS -->
-  <section>
-    <div class="section-label">Focus Area</div>
-    <div class="section-title">
-      <span class="icon icon-ci">🧠</span>
-      Must-Know Interview Topics
-    </div>
-    <div class="priority-grid">
-      <span class="priority-tag tag-ci">CI/CD Pipeline Design</span>
-      <span class="priority-tag tag-ci">Failure Handling & Rollback</span>
-      <span class="priority-tag tag-sec">IAM Roles & Policies</span>
-      <span class="priority-tag tag-aws">VPC Basics & Networking</span>
-      <span class="priority-tag tag-aws">EC2 vs Lambda</span>
-      <span class="priority-tag tag-aws">S3 + Storage Classes</span>
-      <span class="priority-tag tag-con">Docker & Containers</span>
-      <span class="priority-tag tag-con">ECS / EKS Deployment</span>
-      <span class="priority-tag tag-sec">Blue-Green Deployment</span>
-      <span class="priority-tag tag-sec">Canary Releases</span>
-      <span class="priority-tag tag-iac">Terraform Basics</span>
-      <span class="priority-tag tag-mon">CloudWatch Alerts</span>
-      <span class="priority-tag tag-aws">Load Balancer (ALB/NLB)</span>
-      <span class="priority-tag tag-sec">Secrets Management</span>
-    </div>
-  </section>
+Promise = chaining
+async/await = clean synchronous-like code.
+`
+  },
+  {
+    questionId: 16,
+    question: "Explain Promises and async/await together?",
+    definition: `
+Execution Order (Event Loop):
 
-  <div class="divider"></div>
+1. Sync code runs first (Start, End).
+2. Microtasks (Promises, await) run next.
+3. Macrotasks (setTimeout) run last.
 
-  <!-- 42-DAY PLAN -->
-  <section>
-    <div class="section-label">Step 05</div>
-    <div class="section-title">
-      <span class="icon icon-plan">📅</span>
-      42-Day Detailed Learning Plan
-    </div>
-    <div class="weeks-grid">
+Example Output:
+Start
+Inside async
+End
+Promise then
+After await
+setTimeout
 
-      <div class="week-card">
-        <div class="week-header wk1">
-          <span>DevOps + AWS Basics</span>
-          <span class="week-num">WEEK 1</span>
-        </div>
-        <div class="week-body">
-          <div class="day"><span class="day-num">Day 1</span>DevOps basics & lifecycle</div>
-          <div class="day"><span class="day-num">Day 2</span>Git commands + branching</div>
-          <div class="day"><span class="day-num">Day 3</span>GitHub repo + workflow</div>
-          <div class="day"><span class="day-num">Day 4</span>AWS account + EC2 intro</div>
-          <div class="day"><span class="day-num">Day 5</span>Launch EC2 + SSH access</div>
-          <div class="day"><span class="day-num">Day 6</span>Install Node app on EC2</div>
-          <div class="day"><span class="day-num">Day 7</span>S3 static hosting</div>
-          <div class="week-project tag-plan">🚀 Host static website on S3</div>
-        </div>
-      </div>
+Synchronous → Microtasks → Macrotasks.
 
-      <div class="week-card">
-        <div class="week-header wk2">
-          <span>Compute + Networking</span>
-          <span class="week-num">WEEK 2</span>
-        </div>
-        <div class="week-body">
-          <div class="day"><span class="day-num">Day 8</span>VPC basics</div>
-          <div class="day"><span class="day-num">Day 9</span>Subnets + routing tables</div>
-          <div class="day"><span class="day-num">Day 10</span>Security groups setup</div>
-          <div class="day"><span class="day-num">Day 11</span>Load balancer setup</div>
-          <div class="day"><span class="day-num">Day 12</span>Attach EC2 to ALB</div>
-          <div class="day"><span class="day-num">Day 13</span>Health checks config</div>
-          <div class="day"><span class="day-num">Day 14</span>Mini project complete</div>
-          <div class="week-project tag-aws">🚀 Deploy Node.js on EC2 + ALB</div>
-        </div>
-      </div>
+console.log("Check Other practice => file:///C:/workspace-nisha/01_github/02_Javascript/javascript_project_2022/basic-tut-2025/HTML/promiseAsyncAwait.html");
+Spoken Answer : 
+                    *"In JavaScript, execution follows the event loop model. First, synchronous code runs top to bottom. After
+                     that, microtasks like Promise.then() and await callbacks run before macrotasks like setTimeout.
 
-      <div class="week-card">
-        <div class="week-header wk3">
-          <span>CI/CD Pipelines</span>
-          <span class="week-num">WEEK 3</span>
-        </div>
-        <div class="week-body">
-          <div class="day"><span class="day-num">Day 15</span>CI/CD concepts</div>
-          <div class="day"><span class="day-num">Day 16</span>GitHub Actions intro</div>
-          <div class="day"><span class="day-num">Day 17</span>Build pipeline (YAML)</div>
-          <div class="day"><span class="day-num">Day 18</span>Add testing stage</div>
-          <div class="day"><span class="day-num">Day 19</span>Deploy via pipeline</div>
-          <div class="day"><span class="day-num">Day 20</span>Failure handling + alerts</div>
-          <div class="day"><span class="day-num">Day 21</span>CI/CD project done</div>
-          <div class="week-project tag-ci">🚀 CI/CD pipeline for Node app</div>
-        </div>
-      </div>
+                    Promises are objects representing the result of an async operation, and we handle them with .then() or
+                     .catch(). Async/await is built on top of Promises and makes async code look synchronous, improving readability.
 
-      <div class="week-card">
-        <div class="week-header wk4">
-          <span>Containers + Docker</span>
-          <span class="week-num">WEEK 4</span>
-        </div>
-        <div class="week-body">
-          <div class="day"><span class="day-num">Day 22</span>Docker basics</div>
-          <div class="day"><span class="day-num">Day 23</span>Create Dockerfile</div>
-          <div class="day"><span class="day-num">Day 24</span>Build image locally</div>
-          <div class="day"><span class="day-num">Day 25</span>Push to ECR registry</div>
-          <div class="day"><span class="day-num">Day 26</span>ECS intro + Fargate</div>
-          <div class="day"><span class="day-num">Day 27</span>Deploy container to ECS</div>
-          <div class="day"><span class="day-num">Day 28</span>Container project done</div>
-          <div class="week-project tag-con">🚀 Dockerize app + deploy to ECS</div>
-        </div>
-      </div>
+                    For example, if I combine setTimeout, Promises, and async/await, the order is always: sync code first, 
+                    then microtasks from Promises or await, and finally macrotasks like setTimeout. This is why understanding the 
+                    event loop is crucial when debugging async behavior."*
+                     Chcek => "js_async_cheatsheet.pdf"
+`
+  },
+  {
+    questionId: 17,
+    question: "What are sequential promises?",
+    definition: `
+Sequential Promises:
+Execute one after another — each waits for the previous to resolve.
+• Useful when tasks are dependent on each other.   
 
-      <div class="week-card">
-        <div class="week-header wk5">
-          <span>IaC + Monitoring</span>
-          <span class="week-num">WEEK 5</span>
-        </div>
-        <div class="week-body">
-          <div class="day"><span class="day-num">Day 29</span>Terraform basics + HCL</div>
-          <div class="day"><span class="day-num">Day 30</span>Create EC2 via Terraform</div>
-          <div class="day"><span class="day-num">Day 31</span>VPC via Terraform</div>
-          <div class="day"><span class="day-num">Day 32</span>Variables & modules</div>
-          <div class="day"><span class="day-num">Day 33</span>CloudWatch logs setup</div>
-          <div class="day"><span class="day-num">Day 34</span>Metrics & alarms</div>
-          <div class="day"><span class="day-num">Day 35</span>Monitoring dashboard</div>
-          <div class="week-project tag-iac">🚀 Full infra using Terraform</div>
-        </div>
-      </div>
+Parallel Promises:
+Run simultaneously — independent tasks that don’t wait for each other.
+• Useful when tasks are independent.
+`
+  },
+  {
+    questionId: 18,
+    question: "Explain the event loop?",
+    definition: `
+The event loop continuously checks the call stack and callback/microtask queues,
+allowing asynchronous operations without blocking the main thread.
 
-      <div class="week-card">
-        <div class="week-header wk6">
-          <span>Advanced + Final Project</span>
-          <span class="week-num">WEEK 6</span>
-        </div>
-        <div class="week-body">
-          <div class="day"><span class="day-num">Day 36</span>IAM deep dive</div>
-          <div class="day"><span class="day-num">Day 37</span>Roles & policies</div>
-          <div class="day"><span class="day-num">Day 38</span>Blue-Green deployment</div>
-          <div class="day"><span class="day-num">Day 39</span>Canary deployment</div>
-          <div class="day"><span class="day-num">Day 40</span>Final project setup</div>
-          <div class="day"><span class="day-num">Day 41</span>Complete pipeline</div>
-          <div class="day"><span class="day-num">Day 42</span>Review + mock interview</div>
-          <div class="week-project tag-mon">🚀 Full AWS DevOps pipeline</div>
-        </div>
-      </div>
+Cycle:
+Call Stack → Microtask Queue (Promises) → Macrotask Queue (setTimeout, I/O)
+`
+  },
+  {
+    questionId: 19,
+    question: "Explain Debounce & Throttle?",
+    definition: `
+Debounce:
+Delays a function’s execution until after a specified time of no calls — great for search boxes.
+mainly used to improve performance
 
-    </div>
-  </section>
+Throttle:
+Executes a function at fixed intervals — great for scroll or resize events.
 
-  <div class="divider"></div>
+Difference:
+Debounce waits for silence.
+Throttle runs on schedule.
 
-  <!-- PROJECTS -->
-  <section>
-    <div class="section-label">Step 06</div>
-    <div class="section-title">
-      <span class="icon icon-proj">🏗️</span>
-      Real-World Projects
-    </div>
+Example:
+Debounce: Typing → run after user stops.
+Throttle: Scrolling → run every 200ms.
+`
+  },
+  {
+    questionId: 20,
+    question: "Difference between process.nextTick and setImmediate (Node-specific)?",
+    definition: `
+process.nextTick → Runs immediately after the current function, before event loop continues.
+setImmediate → Runs on the next event loop cycle (after I/O).
 
-    <div class="project-card">
-      <div class="project-title" style="color:var(--c1)">Project 1 — CI/CD Pipeline <span style="font-size:13px; color:var(--text3); font-weight:400">(Most Important)</span></div>
-      <div class="arch-flow">
-        <span class="arch-node node-a">GitHub</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-node node-b">CI/CD Pipeline</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-node node-c">EC2 / ECS</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-node node-a">ALB</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-node node-d">S3 Artifacts</span>
-      </div>
-      <div class="feature-list">
-        <span class="feature-chip">Auto build on commit</span>
-        <span class="feature-chip">Run tests</span>
-        <span class="feature-chip">Deploy to EC2/ECS</span>
-        <span class="feature-chip">Rollback support</span>
-        <span class="feature-chip">Health checks</span>
-        <span class="feature-chip">Failure alerts</span>
-      </div>
-    </div>
+Use Cases:
+• nextTick – urgent microtasks.
+• setImmediate – defer heavy tasks post I/O.
 
-    <div class="project-card" style="margin-top:16px">
-      <div class="project-title" style="color:var(--c7)">Project 2 — Full DevOps Pipeline</div>
-      <div class="arch-flow">
-        <span class="arch-node node-b">Docker</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-node node-c">ECS Fargate</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-node node-d">Terraform IaC</span>
-        <span class="arch-arrow">→</span>
-        <span class="arch-node node-e">CloudWatch</span>
-      </div>
-      <div class="feature-list">
-        <span class="feature-chip">Dockerized app</span>
-        <span class="feature-chip">Terraform provisioning</span>
-        <span class="feature-chip">ECS deployment</span>
-        <span class="feature-chip">CloudWatch monitoring</span>
-        <span class="feature-chip">IAM roles</span>
-        <span class="feature-chip">Secrets Manager</span>
-      </div>
-    </div>
-  </section>
+Not Required for answer:
+To use Node-specific features (process) inside the browser, which doesn’t have them.
+`
+  },
+  {
+    questionId: 21,
+    question: "How many things do you know about JS?",
+    definition: `
+JavaScript is a high-level, versatile language for building dynamic web applications.\nI have a strong grasp of its fundamentals, including ES6 features, async programming, and frameworks like React, Angular, Vue, and Node.js for full-stack development.
+`
+  },
+  { 
+        questionId: 22, 
+        question: "What is ES6?", 
+        definition : `
+ES6 is the 2015 update to JavaScript that introduced modern features\n like let, const, arrow functions, classes, modules, and promises — making code cleaner, easier, and more efficient.
+` 
+  },
+  {
+    questionId: 23,
+    question: "What is the difference between Real DOM and Virtual DOM?",
+    definition: `
+Real DOM:
+    • Represents the actual structure of the webpage in the browser.
+    • When a change occurs, the entire page or large sections re-render — making it slower.
 
-  <div class="divider"></div>
+Virtual DOM:
+    \n• A lightweight copy of the Real DOM used by frameworks like React.
+    \n• It updates only the modified parts by comparing (diffing) the Virtual DOM with the Real DOM — making it faster and more efficient.
 
-  <!-- REFERENCES -->
-  <section>
-    <div class="section-label">Step 07</div>
-    <div class="section-title">
-      <span class="icon icon-aws">📚</span>
-      References & Resources
-    </div>
-    <div class="ref-grid">
-      <a href="https://docs.aws.amazon.com" target="_blank" class="ref-card">
-        <span class="ref-icon">☁️</span>
-        <div class="ref-info">
-          <div class="ref-title">AWS Documentation</div>
-          <div class="ref-sub">docs.aws.amazon.com</div>
-        </div>
-      </a>
-      <a href="https://aws.amazon.com/free" target="_blank" class="ref-card">
-        <span class="ref-icon">🆓</span>
-        <div class="ref-info">
-          <div class="ref-title">AWS Free Tier</div>
-          <div class="ref-sub">aws.amazon.com/free</div>
-        </div>
-      </a>
-      <a href="https://explore.skillbuilder.aws" target="_blank" class="ref-card">
-        <span class="ref-icon">🎓</span>
-        <div class="ref-info">
-          <div class="ref-title">AWS Skill Builder</div>
-          <div class="ref-sub">explore.skillbuilder.aws</div>
-        </div>
-      </a>
-      <a href="https://github.com" target="_blank" class="ref-card">
-        <span class="ref-icon">🐙</span>
-        <div class="ref-info">
-          <div class="ref-title">GitHub Projects</div>
-          <div class="ref-sub">Practice repos & forks</div>
-        </div>
-      </a>
-      <a href="https://freecodecamp.org" target="_blank" class="ref-card">
-        <span class="ref-icon">🔥</span>
-        <div class="ref-info">
-          <div class="ref-title">FreeCodeCamp</div>
-          <div class="ref-sub">Free DevOps courses</div>
-        </div>
-      </a>
-      <a href="https://youtube.com" target="_blank" class="ref-card">
-        <span class="ref-icon">▶️</span>
-        <div class="ref-info">
-          <div class="ref-title">YouTube DevOps</div>
-          <div class="ref-sub">TechWorld, Nana, Fireship</div>
-        </div>
-      </a>
-    </div>
-  </section>
+In Short:
+    • Real DOM: Updates the whole UI directly — slower.
+    • Virtual DOM: Updates only what’s changed — faster and smoother.
+`
+  },
+{
+    questionId: 24,
+    question: "What are Web Selectors?",
+    definition: `
+A web selector (also called as CSS selector) is a pattern used in web development to sleect and target specific HTML elements on a webpage,
+so you can apply style (using css) or manipulate them (using javascript). 
+In short- selectors tell the browser “which element(s) this rule applies to.
 
-  <footer>
-    <p>AWS DevOps Roadmap — Interview + Real-World Focused · 42-Day Plan</p>
-    <p style="margin-top:6px; font-size:11px">Built for engineers who want to ship faster and break things less 🚀</p>
-  </footer>
+1. The Universal Selector (*) selects all elements on a webpage.  
+   Example:
+   * {
+     margin: 0;
+     padding: 0;
+   }
 
-</div>
+2. The Element Selector (div, p, h1, etc.) targets all elements of a specific type.  
+   Example:
+   p {
+     color: blue;
+   }
 
-<script>
-  function setTheme(t) {
-    document.documentElement.setAttribute('data-theme', t);
-    document.getElementById('btnDark').classList.toggle('active', t === 'dark');
-    document.getElementById('btnLight').classList.toggle('active', t === 'light');
-    localStorage.setItem('roadmap-theme', t);
-  }
+3. The Class Selector (.classname) targets elements with a specific class attribute.  
+   Example:
+   .highlight {
+     background-color: yellow;
+   }
 
-  const saved = localStorage.getItem('roadmap-theme');
-  if (saved) setTheme(saved);
+4. The ID Selector (#idname) targets a unique element with a specific ID.  
+   Example:
+   #header {
+     font-size: 20px;
+   }
 
-  // Fade-in on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
+5. The Attribute Selector ([attr=value]) selects elements with a particular attribute or value.  
+   Example:
+   input[type="text"] {
+     border: 1px solid gray;
+   }
+
+6. The Descendant Selector (parent child) targets elements nested inside another element.  
+   Example:
+   div p {
+     color: green;
+   }
+
+7. The Pseudo-class Selector (:hover, :nth-child(), etc.) targets elements based on their state or position.  
+   Example:
+   a:hover {
+     color: red;
+   }
+
+8. The Pseudo-element Selector (::before, ::after) styles specific parts of an element.  
+   Example:
+   p::first-letter {
+     font-size: 24px;
+   }
+
+9. In JavaScript, selectors are also used to access elements.  
+   Example:
+   document.querySelector(".btn");      // Selects the first element with class "btn"
+   document.querySelectorAll("p");      // Selects all <p> elements
+   document.getElementById("header");   // Selects the element with ID "header"
+`
+  },
+  { 
+        questionId: 25, 
+        question: "Explain Web Storage, Cookies, Session Storage, Local Storage? what does mean Data Persistence ?",
+        definition : `Data Persistence means keeping data available even after the page reloads or the app is closed.
+
+1. LocalStorage : backs up (saves) some data into localStorage, so the data remains even after:
+    \n• Stores data with no expiration,\n• Data stays even after closing the browser,\n• Example use: saving theme preference, login state (non-sensitive), cart items.
+
+2. SessionStorage
+    • Stores data only for the current browser tab/session
+    • Data disappears when the tab is closed
+    • Example use: form progress, one-session tokens
+
+Why it’s useful
+    • Faster access to data (no server call)
+    • Simple key–value storage  
+    • Helpful for personalizing UI or maintaining state
+
+                                    localStorage.setItem("username", "Nisha");
+                                    const name = localStorage.getItem("username"); // "Nisha"
+
+3. Cookies
+   • Expire based on an expiration date (you set it)
+   • Sent to Server > Sent automatically with each HTTP request
+   • Accessible by JavaScript and the server
+   • Can be HttpOnly, Secure, SameSite → This makes them safer for authentication when used properly.
+
+
+What to Use When
+
+    Use localStorage when:
+    Saving theme (dark/light)
+    Saving user settings
+    Storing non-sensitive UI data
+    Saving cart items for a shopping website
+
+    Use sessionStorage when:
+    Temporary form data
+    Data that should clear after closing a tab
+    One-time session preferences
+
+    Use Cookies when:
+    Authentication (session ID, secure tokens)
+    Server-side validation
+    Managing logged-in states securely
+
+
+    | Feature         | localStorage       | sessionStorage    | Cookies                     |
+|-----------------|--------------------|--------------------|-----------------------------|
+| Capacity        | 5–10 MB            | 5–10 MB            | ~4 KB                       |
+| Lifetime        | Until removed      | Until tab closes   | Custom expiry               |
+| Sent to server? | No                 | No                 | Yes                         |
+| Secure options  | None               | None               | HttpOnly, Secure, SameSite  |
+| Best use        | UI data, prefs     | Temporary data     | Auth, server communication  |
+
+          ` 
+  },
+  { 
+        questionId: 26, 
+        question: "Client-side vs Server-side rendering?", 
+        definition : `
+Client-Side Rendering (CSR)
+
+  • The browser downloads a minimal HTML file and JavaScript.
+  • JavaScript builds the UI in the browser.
+  • Pros: Rich interactions, fast after initial load.
+  • Cons: Slow first load, weaker SEO unless handled properly.
+
+Server-Side Rendering (SSR)
+
+  • The server generates the full HTML for each request.
+  • Browser gets a ready page.
+  • Pros: Faster first load, better SEO.
+  • Cons: More server load, slower page updates after interactions.
+  
+one-sentence interview version:
+ 
+ CSR renders the UI in the browser using JavaScript, while SSR renders the HTML on the server before sending it to the browser—CSR is better for rich interactions,
+ and SSR is better for initial load speed and SEO.
+  ` 
+  },
+  { 
+        questionId: 27, 
+        question: "JavaScript multithreaded or single-threaded?", 
+        definition : `
+JavaScript is single-threaded
+
+  • It runs one task at a time using the main thread.
+  • Concurrency is handled through the event loop, callbacks, promises, and async/await—not by true multithreading.
+  • Web Workers can add parallelism, but they run on separate threads outside the main thread.
+
+` 
+  },
+  { 
+        questionId: 28, 
+        question: "Difference between one-way and two-way binding?", 
+        definition : `
+One-Way Binding
+
+  • Data flows in a single direction (model → UI).
+  • UI updates when data changes, but UI doesn’t directly change the model.
+
+  Two-Way Binding
+
+  • Data flows both ways (model ↔ UI).
+  • Changing the UI updates the model, and changing the model updates the UI automatically.
+
+` 
+  },
+  { 
+        questionId: 29, 
+        question: "How to validate String, Object, and Array? & Definition", 
+        definition : `
+Validate String
+
+  • typeof value === "string" and value.trim().length > 0.
+
+Validate Object
+
+  • typeof value === "object" and value !== null and !Array.isArray(value).
+
+Validate Array
+
+  • Array.isArray(value) and value.length > 0 (if non-empty required).
+
+String: A sequence of characters used to represent text.
+Object: A collection of key–value pairs used to store structured data.
+Array: An ordered list of values stored by index.
+` 
+  },
+  { 
+        questionId: 30, 
+        question: "Explain Array methods?", 
+        definition : ` Array methods let you add, remove, search, and transform items—for example: push/pop (add/remove), map (transform), filter (select), reduce (summarize), and find (locate).
+Common Array Methods
+  • push() – Adds an item to the end.
+
+  • pop() – Removes the last item.
+
+  • shift() – Removes the first item.
+
+  • unshift() – Adds an item to the start.
+
+  • map() – Creates a new array by transforming each element.
+
+  • filter() – Returns items that match a condition.
+
+  • reduce() – Reduces the array to a single value.
+
+  • forEach() – Runs a function on each element (no return).
+
+  • find() – Returns the first matching item.
+` 
+  },
+  { 
+        questionId: 31, 
+        question: "Explain map, filter, and reduce?", 
+        definition : `
+map(): Creates a new array by applying a function to each element.
+
+filter(): Returns a new array with elements that match a condition.
+
+reduce(): Combines all elements into a single value (like sum or total).
+` 
+  },
+  { 
+        questionId: 32, 
+        question: "What are Higher-Order Functions?", 
+        definition : `Functions that take other functions as arguments or return a function. They make code more reusable and flexible.` 
+  },
+  { 
+        questionId: 33, 
+        question: "Difference between splice, slice, and reduce?", 
+        definition : `
+slice(): Returns a new array by copying a portion of the array without modifying the original.
+
+splice(): Adds or removes elements from the array and modifies the original array.
+
+reduce(): Processes all elements and returns a single value, not an array.
+` 
+  },
+  { 
+        questionId: 34, 
+        question: "Difference between includes() and find()?", 
+        definition : `
+includes(): Checks if a value exists in the array and returns true/false.
+
+find(): Returns the first matching element based on a condition.` 
+  },
+  { 
+        questionId: 35, 
+        question: "What is the spread operator?", 
+        definition : `
+Spread Operator (...): Expands arrays or objects into individual elements, making it easy to copy, merge, or pass values.
+` 
+  },
+  { 
+        questionId: 36, 
+        question: "Difference between deep and shallow copy?", 
+        definition : `
+Shallow Copy: Copies only the top-level values; nested objects still reference the same memory.
+
+Deep Copy: Copies all levels of data; nested objects get completely new independent copies.
+` 
+  },
+  { 
+        questionId: 37, 
+        question: "What is a key in JS?", 
+        definition : `
+Key in JavaScript: A key is the name of a property in an object used to access its corresponding value.
+` 
+  },
+  { 
+        questionId: 38, 
+        question: "How many loops are used in JS?", 
+        definition : `
+JavaScript has several loops: for, while, do…while, for…of, for…in, and array loops like forEach().` 
+  },
+  { 
+        questionId: 39, 
+        question: "Difference between for loop and forEach loop?", 
+        definition : `
+for loop: Gives full control over index, conditions, and breaking out of the loop.
+          A traditional loop that lets you control the counter, skip steps, and stop the loop whenever you want.
+
+forEach(): Executes a function on each array item but can’t break early and is used mainly for cleaner array iteration.
+` 
+  },
+  { 
+        questionId: 40, 
+        question: "Difference between vanilla JS and JS, frameworks?", 
+        definition : `
+Vanilla JS vs JavaScript
+
+  • JavaScript is the programming language itself.
+
+  • Vanilla JavaScript simply means using plain, pure JavaScript without any libraries or frameworks.
+
+One-line summary:
+  Vanilla JS is just JavaScript in its raw form, without added tools.
+
+
+JavaScript Frameworks (React, Angular, Vue, etc.)
+
+  • Provide pre-built structure, patterns, and tools for building complex UIs faster.
+
+  • Handle things like state management, routing, and efficient DOM updates.
+
+  • Improve productivity and maintainability for larger applications.
+` 
+  },
+  { 
+        questionId: 41, 
+        question: "What is an anonymous function?", 
+        definition : `
+Anonymous Function
+
+  • A function without a name.
+
+  • Used when the function is needed temporarily, such as in callbacks, event handlers, or array methods.
+
+Example:
+() => { console.log("Hello"); }
+
+One-line summary:
+An anonymous function is a nameless function used mainly for short, inline operations.
+` 
+  },
+  { 
+        questionId: 42, 
+        question: "Explain isNaN() function?", 
+        definition : `
+isNaN() Function
+
+  • isNaN() checks whether a value is Not-a-Number.
+
+  • It returns true if the value cannot be converted into a valid number, otherwise false.
+
+Example:
+isNaN("abc") // true
+isNaN("20") // false
+
+One-line summary:
+isNaN() tells you if a value is not a valid number.
+` 
+  },
+  { 
+        questionId: 43, 
+        question: "How to handle exceptions in JS?", 
+        definition : `
+Handling Exceptions in JavaScript
+
+ • Use try–catch to catch and handle errors.
+
+ • try contains the code that may fail, catch handles the error, and finally runs always (optional).
+                                                        try {
+                                                          riskyFunction();
+                                                        } catch (error) {
+                                                          console.error(error);
+                                                        } finally {
+                                                          cleanup();
+                                                        }
+One-line summary:
+Use try–catch to safely catch and manage errors in JavaScript.
+` 
+  },
+  
+  { 
+        questionId: 44, 
+        question: "What is event propagation?", 
+        definition : `
+Event Propagation
+One-line summary: Event propagation defines how events travel through the DOM in capturing and bubbling phases. OR
+
+ • Event propagation is the flow of events through the DOM in two phases:
+
+    1. Capturing phase – event moves from parent to child.
+
+    2. Bubbling phase – event moves from child back up to parent.
+` 
+  },
+  { 
+        questionId: 45, 
+        question: "What is event bubbling?", 
+        definition : `
+Event Bubbling
+
+One-line summary: Event bubbling is when an event triggers on the child first and then propagates up to the parent elements.
+ 
+ • Event bubbling means an event starts from the deepest (child) element and moves upward through its parent elements.
+
+ • It helps handle events at a higher level without attaching many listeners.
+` 
+  },
+  { 
+        questionId: 46, 
+        question: "How to fix a 404 error?", 
+        definition : `
+Fixing a 404 Error
+
+ • A 404 happens when a page or resource is not found.
+
+ • Check and correct the URL, ensure the file or route exists, and verify the server or API path is correct.
+
+One-line summary:
+Fix a 404 by correcting the URL or making sure the requested resource actually exists on the server.
+` 
+  },
+  { 
+        questionId: 47, 
+        question: "What is a CORS issue and what is a proxy?", 
+        definition : `
+CORS Issue
+
+ • CORS (Cross-Origin Resource Sharing) happens when a browser blocks requests to a different domain or port for security reasons.
+
+ • It occurs when the server doesn’t allow your origin.
+
+Proxy
+
+ • A proxy is a middle layer that forwards your request to another server.
+
+ • It helps bypass CORS by making the request from the server side instead of the browser.
+
+One-line summary:
+A CORS issue is a blocked cross-domain request, and a proxy is a server that forwards requests to avoid such restrictions.
+` 
+  },
+  { 
+        questionId: 48, 
+        question: "Explain HTTP request methods?", 
+        definition : `
+ • HTTP Request Methods
+
+ • GET – Fetch data from the server.
+
+ • POST – Send new data to the server.
+
+ • PUT – Update or replace existing data.
+
+ • PATCH – Partially update data.
+
+ • DELETE – Remove data from the server.
+
+One-line summary:
+HTTP methods define the type of action you want to perform on a server’s resource.
+` 
+  },
+  { 
+        questionId: 49, 
+        question: "Explain HTTP status codes (400, 401, 404, 500, 502)?", 
+        definition : `
+HTTP Status Codes
+
+ • 400 – Bad Request: The server can’t process the request due to invalid input.
+
+ • 401 – Unauthorized: Authentication is required or failed.
+
+ • 404 – Not Found: The requested resource doesn’t exist.
+
+ • 500 – Internal Server Error: Server encountered an unexpected error.
+
+ • 502 – Bad Gateway: The server received an invalid response from another server.
+
+One-line summary:
+These codes indicate different client or server errors that help identify what went wrong in a request.
+` 
+  },
+  { 
+        questionId: 50, 
+        question: "What is a recursive function?", 
+        definition : `
+Recursive Function
+
+ • A function that calls itself to solve a problem.
+
+ • Used for tasks that can be broken into smaller, similar subproblems (e.g., factorial, tree traversal).
+
+One-line summary:
+A recursive function solves a problem by repeatedly calling itself with smaller inputs.
+` 
+  },
+  { 
+        questionId: 51, 
+        question: "Explain JWT?", 
+        definition : `
+JWT (JSON Web Token)
+
+ • JWT is a secure token format used for authentication.
+
+ • It contains encoded user data and is signed so it can’t be tampered with.
+
+ • The server verifies the token instead of checking the database each time.
+
+One-line summary:
+JWT is a signed token used to verify user identity without repeated database lookups.
+` 
+  },
+  { 
+        questionId: 52, 
+        question: "Currying, memoization?", 
+        definition : `
+Currying
+
+ • Breaking a function with multiple arguments into a series of functions that take one argument at a time.
+
+ • Helps reuse functions and improves code flexibility.
+
+Memoization
+
+ • Caching a function’s previous results to avoid recalculating.
+
+ • Improves performance for expensive operations.
+
+One-line summary:
+Currying transforms functions into smaller ones; memoization speeds them up by caching results.
+` 
+  },
+  { 
+        questionId: 53, 
+        question: "Currying, memoization?", 
+        definition : `
+Currying
+
+ • Breaking a function with multiple arguments into a series of functions that take one argument at a time.
+
+ • Helps reuse functions and improves code flexibility.
+
+Memoization
+
+ • Caching a function’s previous results to avoid recalculating.
+
+ • Improves performance for expensive operations.
+
+One-line summary:
+Currying transforms functions into smaller ones; memoization speeds them up by caching results.
+` 
+  },
+  { 
+        questionId: 54, 
+        question: "What is a Bundler & Compiler?", 
+        definition : `Bundler :
+A bundler takes multiple files from your project and packages them into fewer files (usually 1–3 optimized bundles) for the browser.
+
+Key responsibilities:
+
+ • Combine JavaScript modules
+
+ • Merge and process CSS
+
+ • Pack images, fonts, assets
+
+ • Optimize output (minify, tree-shake, compress)
+
+ • Reduce number of HTTP requests
+
+Examples:
+
+Webpack, Rollup, Parcel, Esbuild (can bundle), Vite (uses Rollup in production)
+import Button from './Button.js'
+import { add } from './utils/math.js'
+
+bundle.js   // contains Button + math + everything else | Bundler outputs a single optimized file
+
+Compiler :
+A compiler transforms code from one language or syntax to another.
+It does NOT bundle files.
+
+Key responsibilities:
+
+• Convert TypeScript → JavaScript
+
+• Convert JSX → JavaScript
+
+• Compile Sass/Less → CSS
+
+• Convert modern JS → older JS (via Babel)
+
+Examples:
+
+Babel, TypeScript compiler (tsc), Sass, esbuild (can compile and bundle)
+const greet: string = "Hello"; Compiler (tsc) outputs: const greet = "Hello"; | Just transforms the code.
+` 
+  },
+];
+
+    const questionGrid = document.getElementById("questionGrid");
+    const definitionContainer = document.getElementById("definitionContainer");
+
+    jsInterviewQuestions.forEach(item => {
+      // create top question box
+      const card = document.createElement("div");
+      card.className = "question-card";
+      card.innerHTML = `<strong style="color:#b366ff;">Q${item.questionId}:</strong> ${item.question}`;
+      card.addEventListener("click", () => scrollToDefinition(item.questionId));
+      questionGrid.appendChild(card);
+
+      // create definition section
+      const def = document.createElement("div");
+      def.className = "definition-section";
+      def.id = `question-${item.questionId}`;
+      def.innerHTML = `
+        <h3>Question ${item.questionId}: ${item.question}</h3>
+        <pre>${item.definition}</pre>
+      `;
+      definitionContainer.appendChild(def);
+    });
+
+    function scrollToDefinition(id) {
+      const target = document.getElementById(`question-${id}`);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        target.classList.add("highlight");
+        setTimeout(() => target.classList.remove("highlight"), 1500);
+      }
+    }
+
+    
+    // === Back to Top Button Logic ===
+    const backToTopBtn = document.getElementById("backToTopBtn");
+
+    window.addEventListener("scroll", () => {
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        backToTopBtn.style.display = "block";
+      } else {
+        backToTopBtn.style.display = "none";
       }
     });
-  }, { threshold: 0.08 });
 
-  document.querySelectorAll('.card, .week-card, .project-card, .ref-card').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(18px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, box-shadow 0.2s';
-    observer.observe(el);
-  });
-</script>
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+
+   /// === Theme Toggle Logic with Icons and Fade ===
+    const themeToggle = document.getElementById("themeToggle");
+    const body = document.body;
+
+    // Load saved theme preference
+    if (localStorage.getItem("theme") === "light") {
+    enableLightMode(false);
+    } else {
+    enableDarkMode(false);
+    }
+
+    themeToggle.addEventListener("click", () => {
+    body.classList.add("fade-transition");
+    if (body.classList.contains("light-mode")) {
+        enableDarkMode();
+    } else {
+        enableLightMode();
+    }
+    setTimeout(() => body.classList.remove("fade-transition"), 400);
+    });
+
+    function enableLightMode(save = true) {
+    body.classList.add("light-mode");
+    themeToggle.innerHTML = "🌙 Dark";
+    if (save) localStorage.setItem("theme", "light");
+    }
+
+    function enableDarkMode(save = true) {
+    body.classList.remove("light-mode");
+    themeToggle.innerHTML = "☀️ Light";
+    if (save) localStorage.setItem("theme", "dark");
+    }
+  </script>
 </body>
 </html>
