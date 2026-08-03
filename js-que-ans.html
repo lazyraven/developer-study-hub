@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="https://img.icons8.com/?size=100&id=108784&format=png&color=000000">
   <title>JavaScript Q&A Plan</title>
+  <script src="../Code/08_deeepClone.js"></script>
 <style>
     body {
         background-color: #111;
@@ -327,14 +328,28 @@ console.log(obj.toString());
   },
   {
     questionId: 9,
-    question: "How to deep clone an object?",
+    question: "How to deep clone an object? What is the difference between deep clone and shallow clone? How do you deep clone in JavaScript?",
     definition: `
 Deep cloning means creating a full copy of an object, including nested objects, 
 so that changes in the copy don’t affect the original.
 
-Modern Method:
-const clone = structuredClone(obj);
- In Deep Learning : Go to this file console.log("file:///C:/workspace-nisha/01_github/02_Javascript/javascript_project_2022/basic-tut-2025/HTML/JavaScript");
+// Deep clone options
+// 1. structuredClone (modern, handles Date/Map/Set)
+const deep1 = structuredClone(obj);
+
+// 2. JSON round-trip (simple, but loses functions/undefined/Date)
+const deep2 = JSON.parse(JSON.stringify(obj));
+
+// 3. Recursive implementation // can use WeakMap to handle circular references
+function deepClone(val) {
+  if (val === null || typeof val !== "object") return val;
+  if (Array.isArray(val)) return val.map(deepClone);
+  return Object.fromEntries(
+    Object.entries(val).map(([k, v]) => [k, deepClone(v)])
+  );
+}
+
+ In Deep Learning : Go to this file console.log("file:///F:/Projects/github/02_Javascript/javascript_project_2022/basic-tut-2025/HTML/deepClone.html");
 
 `
   },
@@ -1741,6 +1756,83 @@ Fluency :
  One-Line Summary: Default parameters allow functions to use predefined values when arguments are missing or undefined.
         
         `
+  },
+  {
+    question: "DOM basics for refs, events, and debugging?",
+    definition: `
+    The DOM, or Document Object Model, is a tree-like representation of an HTML document. 
+    JavaScript uses the DOM to read and modify elements dynamically.
+
+    Events allow us to respond to user actions like clicks, typing, or scrolling.
+
+    Refs are a way to directly access a DOM element when necessary, especially in React or Vue.
+
+    For debugging DOM-related issues, I usually use the browser DevTools, inspect elements, check event listeners, console.log values, 
+    and use breakpoints to understand what is happening.
+
+    In Details :
+
+    The DOM stands for Document Object Model. When a browser loads an HTML page, it converts it into a tree of JavaScript objects called the DOM.
+
+    JavaScript can use this DOM to select elements, change their content, update styles, add or remove elements, and respond to user interactions.
+
+    Events are actions triggered by users or the browser, such as clicking a button, submitting a form, typing into an input, or hovering over an element.
+    We attach event listeners to handle these actions.
+
+    Refs are mainly used in frameworks like React and Vue when we need direct access to a DOM element instead of using state. For example, focusing an input field,
+    measuring an element's size, or integrating third-party libraries.
+
+    When debugging DOM issues, I inspect the HTML using Chrome DevTools, check whether elements exist, verify event handlers are firing, use console.log or debugger statements, 
+    and examine the Elements and Console tabs.
+    `
+  },
+  {
+    question: "Why would you use refs instead of state?",
+    definition: `State is used for rendering UI changes, while refs are used to directly access DOM elements without causing a re-render. For example, focusing an input, 
+    scrolling to an element, or integrating with third-party libraries.`
+  },
+
+  {
+    question: "What is event delegation??",
+    definition: `Event delegation means attaching one event listener to a parent element and using event bubbling to handle events from child elements.
+     It's more efficient when there are many dynamically created elements.`
+  },
+  {
+    question: "How do you debug DOM issues?",
+    definition: `I inspect the HTML using DevTools, verify the element exists, check whether the event listener is attached, use console.log or breakpoints, inspect the event object, 
+    and confirm that the script executes after the DOM has loaded.`
+  },
+  {
+    question: "When would you use Map/Set over plain objects/arrays? What is WeakMap/WeakSet?",
+    definition: `Map and Set are more suitable for scenarios where you need to store key-value pairs or unique values, respectively. 
+    They provide better performance for large datasets and offer more built-in methods. WeakMap and WeakSet allow you to create mappings or sets that don't prevent their keys from being garbage collected,
+    which is useful for caching or storing metadata without causing memory leaks.`
+  },
+
+  {
+    question: "?",
+    definition: ``
+  },
+  {
+    question: "?",
+    definition: ``
+  },
+  {
+    question: "?",
+    definition: ``
+  },
+
+  {
+    question: "?",
+    definition: ``
+  },
+  {
+    question: "?",
+    definition: ``
+  },
+  {
+    question: "?",
+    definition: ``
   },
 ];
 
